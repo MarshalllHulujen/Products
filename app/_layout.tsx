@@ -1,58 +1,73 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { View, Text } from "@/components/Themed";
+import Constants from "expo-constants";
+import { Slot, Stack } from "expo-router";
+import { HomeImage } from "../Icons/HomeImage";
+import { CalendarImage } from "@/Icons/CalendarImage";
+import { ListImage } from "@/Icons/ListImage";
+import { DownloadImage } from "@/Icons/DownloadImage";
+import { ProfilePicture } from "@/Icons/ProfileImage";
+import { Link } from "expo-router";
+import { IconImage } from "@/Icons/IconImage";
+import { SearchImage } from "@/Icons/SearchImage";
+import { NotificaitonImage } from "@/Icons/NotificationImage";
 
-import { useColorScheme } from '@/components/useColorScheme';
-
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+const Tabs = () => {
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        gap: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+      }}
+    >
+      <Link href="/">
+        <HomeImage />
+      </Link>
+      <Link href="/">
+        <CalendarImage />
+      </Link>
+      <Link href="/">
+        <ListImage />
+      </Link>
+      <Link href="/">
+        <DownloadImage />
+      </Link>
+      <Link href="/">
+        <ProfilePicture />
+      </Link>
+    </View>
+  );
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+const Header = () => {
+  return (
+    <View>
+      <Link href="/">
+        <IconImage />
+      </Link>
+      <Link href="/">
+        <SearchImage />
+      </Link>
+      <Link href="/">
+        <NotificaitonImage />
+      </Link>
+    </View>
+  );
+};
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
-  });
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: Constants.statusBarHeight,
+        justifyContent: "center",
+      }}
+    >
+      <Slot />
+      <Tabs />
+    </View>
   );
 }
